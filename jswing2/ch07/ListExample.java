@@ -3,19 +3,24 @@
 // renderer (BookCellRenderer.java) to show a list of books with icons of their
 // covers.
 //
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
+import java.awt.BorderLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JList;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+
+@SuppressWarnings({"unchecked","rawtypes","serial"})
 public class ListExample extends JPanel {
 
        private BookEntry books[] = {
            new BookEntry("Ant: The Definitive Guide", "covers/ant.gif"),
-           new BookEntry("Database Programming with JDBC and Java",
-                         "covers/jdbc.gif"),
+           new BookEntry("Database Programming with JDBC and Java", "covers/jdbc.gif"),
            new BookEntry("Developing Java Beans", "covers/beans.gif"),
-           new BookEntry("Developing JSP Custom Tag Libraries",
-                         "covers/jsptl.gif"),
+           new BookEntry("Developing JSP Custom Tag Libraries", "covers/jsptl.gif"),
            new BookEntry("Java 2D Graphics", "covers/java2d.gif"),
            new BookEntry("Java and XML", "covers/jxml.gif"),
            new BookEntry("Java and XSLT", "covers/jxslt.gif"),
@@ -40,28 +45,48 @@ public class ListExample extends JPanel {
            new BookEntry("Learning Java", "covers/learnj.gif")
        };
 
-    private JList booklist = new JList(books);
+    private JList booklist; // = new JList(books); // modified
 
-    public ListExample() {
+	public ListExample() {
         setLayout(new BorderLayout());
         JButton button = new JButton("Print");
         button.addActionListener(new PrintListener());
 
         booklist = new JList(books);
         booklist.setCellRenderer(new BookCellRenderer());
-        booklist.setVisibleRowCount(4);
+        booklist.setVisibleRowCount(5);
         JScrollPane pane = new JScrollPane(booklist);
 
-        add(pane, BorderLayout.NORTH);
+        add(pane, BorderLayout.CENTER);
         add(button, BorderLayout.SOUTH);
     }
 
     public static void main(String s[]) {
-         JFrame frame = new JFrame("List Example");
-         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-         frame.setContentPane(new ListExample());
-         frame.pack();
-         frame.setVisible(true);
+    	boolean useOriginalCode = false;
+    	if (useOriginalCode) {
+    		
+            JFrame frame = new JFrame("List Example");
+            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            frame.setContentPane(new ListExample());
+            frame.pack();
+            frame.setVisible(true);
+    		
+    	} else {
+            // Start the GUI on the Event Dispatch Thread (EDT)
+            javax.swing.SwingUtilities.invokeLater(
+                new Runnable() { public void run() {
+
+                    JFrame frame = new JFrame("List Example");
+                    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                    frame.setContentPane(new ListExample());
+                    frame.pack();
+                    frame.setLocationByPlatform(true);
+                    frame.setVisible(true);
+
+                } }
+            );
+
+    	}
     }
 
     // An inner class to respond to clicks on the Print button
