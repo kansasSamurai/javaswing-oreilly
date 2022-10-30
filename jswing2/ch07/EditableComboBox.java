@@ -2,20 +2,26 @@
 // A fancy example of JComboBox with a custom renderer and editor used to
 // display a list of JLabel objects that include both text and icons.
 //
-import java.awt.*;
-import java.awt.event.*;
-import java.util.*;
-import javax.swing.*;
+
+import java.awt.BorderLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.swing.JComboBox;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
 
 public class EditableComboBox extends JPanel {
 
-    private BookEntry books[] = {
+	private static final long serialVersionUID = 1L;
+
+	private BookEntry books[] = {
            new BookEntry("Ant: The Definitive Guide", "covers/ant.gif"),
-           new BookEntry("Database Programming with JDBC and Java",
-                         "covers/jdbc.gif"),
+           new BookEntry("Database Programming with JDBC and Java",  "covers/jdbc.gif"),
            new BookEntry("Developing Java Beans", "covers/beans.gif"),
-           new BookEntry("Developing JSP Custom Tag Libraries",
-                         "covers/jsptl.gif"),
+           new BookEntry("Developing JSP Custom Tag Libraries", "covers/jsptl.gif"),
            new BookEntry("Java 2D Graphics", "covers/java2d.gif"),
            new BookEntry("Java and XML", "covers/jxml.gif"),
            new BookEntry("Java and XSLT", "covers/jxslt.gif"),
@@ -40,29 +46,30 @@ public class EditableComboBox extends JPanel {
            new BookEntry("Learning Java", "covers/learnj.gif")
     };
 
-    Map bookMap = new HashMap();
+    Map<String,BookEntry> bookMap = new HashMap<String,BookEntry>();
 
     public EditableComboBox() {
+        super(new BorderLayout()); 
+    	
       // Build a mapping from book titles to their entries
       for (int i = 0 ; i < books.length; i++) {
         bookMap.put(books[i].getTitle(), books[i]);
       }
 
-      setLayout(new BorderLayout()); 
-
-      JComboBox bookCombo = new JComboBox(books);
+      final JComboBox<BookEntry> bookCombo = new JComboBox<BookEntry>(books);
       bookCombo.setEditable(true);
-      bookCombo.setEditor(
-        new ComboBoxEditorExample(bookMap, books[0]));
-      bookCombo.setMaximumRowCount(4);
+      bookCombo.setEditor( new ComboBoxEditorExample(bookMap, books[0]) );
+      bookCombo.setMaximumRowCount(8);
+      bookCombo.setActionCommand("Hello");
       bookCombo.addActionListener(new ActionListener() {
           public void actionPerformed(ActionEvent e) {
-              System.out.println("You chose " + ((JComboBox)e.getSource()).
-                                                getSelectedItem()  + "!"); 
+              System.out.println("You chose " 
+                  + bookCombo // ((JComboBox)e.getSource())
+                  .getSelectedItem()  + "!"); 
           }
       });
-      bookCombo.setActionCommand("Hello");
-      add(bookCombo, BorderLayout.CENTER);
+      
+      this.add(bookCombo, BorderLayout.CENTER);
     }
 
     public static void main(String s[]) {
