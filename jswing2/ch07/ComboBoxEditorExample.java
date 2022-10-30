@@ -1,26 +1,26 @@
-//  ComboBoxEditorExample.java
-// A custom combobox editor for use with the EditableComboBox class.
-//
 import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
 import javax.swing.*;
 import javax.swing.border.*;
 
-public class ComboBoxEditorExample implements ComboBoxEditor
-{
-    Map map;
-    ImagePanel panel;
-    ImageIcon questionIcon;
+//ComboBoxEditorExample.java
+//A custom combobox editor for use with the EditableComboBox class.
+//
+public class ComboBoxEditorExample implements ComboBoxEditor {
+	
+    private ImageIcon questionIcon;
+    private ImagePanel panel;
+    private Map<String,BookEntry> map;
  
-    public ComboBoxEditorExample(Map m, BookEntry defaultChoice) {
+    public ComboBoxEditorExample(Map<String,BookEntry> m, BookEntry defaultChoice) {
         map = m;
         panel = new ImagePanel(defaultChoice); 
-        questionIcon = new ImageIcon("question.gif"); 
+        questionIcon = new ImageIcon( "/C:/dev/workspaces/git/book.javaswing_oreilly/jswing2/ch07/" // modified
+        		+ "question.gif"); 
     }
 
-    public void setItem(Object anObject)
-    {
+    public void setItem(Object anObject) {
         if (anObject != null) {
             panel.setText(anObject.toString());
             BookEntry entry = (BookEntry)map.get(anObject.toString());
@@ -31,10 +31,12 @@ public class ComboBoxEditorExample implements ComboBoxEditor
         } 
     }
 
-    public Component getEditorComponent() { return panel; }
-    public Object getItem() { return panel.getText(); }
     public void selectAll() { panel.selectAll(); }
 
+    public Object getItem() { return panel.getText(); }
+    
+    public Component getEditorComponent() { return panel; }
+    
     public void addActionListener(ActionListener l) {
         panel.addActionListener(l); 
     }
@@ -47,8 +49,10 @@ public class ComboBoxEditorExample implements ComboBoxEditor
     //  repainting the image and the text.
     class ImagePanel extends JPanel {
        
-        JLabel imageIconLabel;
-        JTextField textField;
+		private static final long serialVersionUID = 1L;
+
+		JLabel imageIconLabel;        
+		JTextField textField;
 
         public ImagePanel(BookEntry initialEntry) {
             setLayout(new BorderLayout());
@@ -60,11 +64,12 @@ public class ComboBoxEditorExample implements ComboBoxEditor
             textField.setColumns(45);
             textField.setBorder(new BevelBorder(BevelBorder.LOWERED));
 
-            add(imageIconLabel, BorderLayout.WEST);
-            add(textField, BorderLayout.EAST);
+            add(textField, BorderLayout.SOUTH); // EAST
+            add(imageIconLabel, BorderLayout.NORTH); // WEST
         }
 
         public void setText(String s) { textField.setText(s); }
+        
         public String getText() { return (textField.getText()); }
 
         public void setIcon(Icon i) {
@@ -77,8 +82,10 @@ public class ComboBoxEditorExample implements ComboBoxEditor
         public void addActionListener(ActionListener l) {
             textField.addActionListener(l); 
         }
+        
         public void removeActionListener(ActionListener l) {
             textField.removeActionListener(l); 
         }
     }
+    
 } 
