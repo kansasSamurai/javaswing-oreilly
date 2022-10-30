@@ -5,7 +5,8 @@
 import javax.swing.ImageIcon;
 
 public class BookEntry {
-    private final String title;
+
+	private final String title;
     private final String imagePath;
     private ImageIcon image;
 
@@ -18,7 +19,7 @@ public class BookEntry {
     
     public ImageIcon getImage() {
         if (image == null) {
-            image = new ImageIcon(imagePath);
+            image = new ImageIcon("/C:/dev/workspaces/git/book.javaswing_oreilly/jswing2/ch07/" + imagePath); // modified
         }
         return image;
     }
